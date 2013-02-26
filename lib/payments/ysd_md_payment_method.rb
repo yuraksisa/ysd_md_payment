@@ -4,10 +4,35 @@ module Payments
   
   # Instances of this class represent payment method.
   #
+  # There are two types of payment methods, direct (instances of PaymentMethod)
+  # and gateways (instances of GatewayPaymentMethod). For the last ones, the 
+  # credit card information is held by the bank.
+  #
+  # These two types have a different behaviour, though their share a lot of
+  # functionality
+  #
+  # In this release the following payment methods are implemented
+  #
+  #  :cecabank  
+  #
+  #     It the payment gateway for cecabank virtual tpv used by some important
+  #     banks on Spain
+  #
   # Usage:
+  #
+  #   Get all the configured payment methods
+  #
+  #     Payments::PaymentMethod.all
+  #
+  #   Configure the application payment methods
   #   
-  #   Payments::PaymentMethod.available= [:paypal, :cecabank]
-  #   Payments::PaymentMethod.
+  #     Payments::PaymentMethod.available= [:paypal, :cecabank]
+  #   
+  #   Get a payment method to perform a charge
+  #
+  #     cecabank = Payments::PaymentMethod.get(:cecabank)
+  #     charge = cecabank.create_charge({:amount => 150.50, :currency => 'EUR'})
+  #     cecabank.
   #
   #
   class PaymentMethod

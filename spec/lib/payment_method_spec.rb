@@ -83,18 +83,26 @@ describe Payments::PaymentMethod do
     
     context "Non existing payment methods assignment" do
    
-      before :each do
-        SystemConfiguration::Variable.should_not_receive(:set_value)
-      end
-   
       it "should not assign from string" do
+        SystemConfiguration::Variable.should_not_receive(:set_value)
         Payments::PaymentMethod.available= 'non_existing'
       end
       
       it "should not assign from array" do
+        SystemConfiguration::Variable.should_not_receive(:set_value)
         Payments::PaymentMethod.available= [:non_existing]
       end
    
+      it "should assign a payment method of two" do
+
+        SystemConfiguration::Variable.should_receive(:set_value).
+          with('payments.available_methods', 'test_payment_method').twice
+
+        Payments::PaymentMethod.available= 'test_payment_method, non_existing'
+        Payments::PaymentMethod.available= [:test_payment_method, :non_existing]
+
+      end
+
     end
 
   end
