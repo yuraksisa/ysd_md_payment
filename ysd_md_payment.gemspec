@@ -11,7 +11,8 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency "tilt"
   s.add_runtime_dependency "ysd_md_configuration"
-
+  s.add_runtime_dependency "r18n-desktop"
+  
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
 

@@ -5,7 +5,7 @@ require 'digest/sha1' unless defined? Digest::SHA1
 # It represents the CECABANK payment
 #
 module Payments
-  
+
   #
   # The concrete cecabank payment
   #
@@ -107,7 +107,10 @@ module Payments
 
   end
 
-  CECABANK = PaymentGatewayMethod.new('cecabank')
-  CECABANK.extend CecaBankPayment  
+  cecabank = GatewayPaymentMethod.new(:cecabank,
+    :title => R18n.get.t.cecabank.title,
+    :description => R18n.get.t.cecabank.description) 
+
+  cecabank.extend CecaBankPayment  
 
 end

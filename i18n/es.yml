@@ -1,0 +1,12 @@
+cecabank:
+  title: Visa o Mastercard, pago seguro
+  description: >
+               El pago se realiza a través de pasarela de pago. Es un pago
+               seguro, los datos de su tarjeta sólo son vistos por la entidad
+               bancaria. Se admite Visa, Mastercard y American Express.
+bank_transfer:
+  title: Transferencia bancaria
+  description: >
+               Realice la transferencia bancaria en la siguiente cuenta:
+               %{bank_name}
+               %{account_number}

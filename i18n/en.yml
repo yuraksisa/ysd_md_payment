@@ -1,0 +1,12 @@
+cecabank:
+  title: Visa or Mastercard, secure payment
+  description: >
+               The payment is make through a payment gateway. It's a secure
+               payment. Your credit card data are only viewed by the bank.
+               Visa, Mastercard and American Express are admitted.
+bank_transfer:
+  title: Bank transfer
+  description: >
+               Make a bank transfer to the following bank account:
+               %{bank_name}
+               %{account_number}

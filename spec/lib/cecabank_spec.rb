@@ -1,17 +1,18 @@
 require 'spec_helper'
 
-#describe "CecaBank payment" do 
+describe "Cecabank gateway payment" do 
 
-  #context "CECABank defined" do
+  describe "uno" do
 
-    #let(:cecabank) { Payments::CECABANK}
+    let(:cecabank) { Payments::PaymentMethod.get(:cecabank)}
 
-    #it "should" do
-    #
-    #  puts cecabank.form({:amount => 150.00, :reference => '1234567890'})
-    #
-    #end
-
-  #end
+    it "should" do
+      
+      puts "cecabank: #{cecabank.description}"
+      puts "cecabank chargeform: #{cecabank.charge_form({:amount => 150.00, :reference => '1234567890'})}"
+    
+    end
 	
-#end
+  end
+
+end

@@ -2,47 +2,67 @@ require 'ysd_md_configuration' unless defined?System::Variable
 
 module Payments
   
-  # Instances of this class represent payment method.
+  # 
+  # Instances of this class represent payment method. 
   #
-  # There are two types of payment methods, direct (instances of PaymentMethod)
-  # and gateways (instances of GatewayPaymentMethod). For the last ones, the 
-  # credit card information is held by the bank.
+  # An application could use only a set of the defined payment methods. These
+  # can be setup using the available= method o setting up the 
+  # payments.available_methods SystemConfiguration::Variable
+  # 
+  # There are concrete classes for diferent types of payments process:
   #
-  # These two types have a different behaviour, though their share a lot of
-  # functionality
+  #  - gateway payment : (GatewayPaymentMethod)
   #
-  # In this release the following payment methods are implemented
+  #    They connect to the bank to make the charge. The customer credit card
+  #    is not stored in the system.
+  # 
+  #  - offline payment : (OfflinePaymentMethod)
   #
-  #  :cecabank  
-  #
-  #     It the payment gateway for cecabank virtual tpv used by some important
-  #     banks on Spain
+  #    The customer makes a payment offline, making a bank transfer, sending
+  #    a cheque, ...
   #
   # Usage:
   #
-  #   Get all the configured payment methods
+  #  ## Create a new payment method
+  #
+  #     sermepa = Payments::Payment.new(:sermepa, 
+  #       :title => 'The title',
+  #       :description => 'The description')
+  #
+  #  ## Get all payment methods
   #
   #     Payments::PaymentMethod.all
   #
-  #   Configure the application payment methods
+  #  ## Define the application(available) payment methods
   #   
   #     Payments::PaymentMethod.available= [:paypal, :cecabank]
+  #
+  #     or
+  #
+  #     SystemConfiguration::Variable.set_value('payment.available_methods',
+  #       'paypal, cecabank')
   #   
-  #   Get a payment method to perform a charge
+  #  ## Get the application(available) payment methods 
+  #
+  #     Payments::PaymentMehtod.available
+  #
+  #  ## Get a payment method instance (a concrete payment method)
   #
   #     cecabank = Payments::PaymentMethod.get(:cecabank)
-  #     charge = cecabank.create_charge({:amount => 150.50, :currency => 'EUR'})
-  #     cecabank.
   #
+  #  ## charge (payment gateway method)
+  #
+  #     charge = cecabank.charge({:amount => 150.50, :currency => 'EUR'})
   #
   class PaymentMethod
      
-     attr_accessor :id, :title, :description
+     attr_accessor :id, :title, :description, :opts
    
      def initialize(id, opts={})
        @id = id
-       @title = opts[:title]
-       @description = opts[:description]
+       @title = opts.delete(:title)
+       @description = opts.delete(:description)
+       @opts = opts
        PaymentMethod.payment_methods << self
      end
 
@@ -99,6 +119,16 @@ module Payments
 
        SystemConfiguration::Variable.set_value('payments.available_methods', 
             assign_methods.join(', ')) unless assign_methods.empty?
+
+     end
+
+     #
+     # Create a charge using the payment method
+     #
+     def charge(opts)
+
+       amount = opts[:amount]
+       currency = opts[:currency]
 
      end
 
