@@ -1,5 +1,6 @@
 require 'tilt' unless defined?Tilt
 require 'digest/sha1' unless defined? Digest::SHA1
+require 'r18n-core'
 
 #
 # It represents the CECABANK payment
@@ -104,12 +105,12 @@ module Payments
       ("%.2f" % amount).gsub('.','')
     end
 
-
   end
-
+  
   cecabank = GatewayPaymentMethod.new(:cecabank,
-    :title => R18n.get.t.cecabank.title,
-    :description => R18n.get.t.cecabank.description) 
+    :title => Payments.r18n.t.cecabank.title,
+    :description => Payments.r18n.t.cecabank.description,
+    :icon => 'http://www.credit-card-logos.com/images/multiple_credit-card-logos-1/credit_card_logos_3.gif') 
 
   cecabank.extend CecaBankPayment  
 

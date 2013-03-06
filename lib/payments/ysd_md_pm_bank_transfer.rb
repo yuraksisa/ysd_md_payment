@@ -19,8 +19,8 @@ module Payments
  end
 
  bank_transfer = OfflinePaymentMethod.new(:bank_transfer,
-   :title => R18n.get.t.bank_transfer,
-   :description => R18n.get.t.bank_transfer.description)
+   :title => Payments.r18n.t.bank_transfer.title,
+   :description => Payments.r18n.t.bank_transfer.description)
 
  bank_transfer.extend BankTransfer
 

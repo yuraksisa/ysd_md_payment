@@ -1,7 +1,15 @@
+require 'json' unless defined?JSON
 require 'ysd_md_configuration' unless defined?System::Variable
 
 module Payments
   
+  def self.r18n
+
+    @@local_i18n ||= R18n::I18n.new(['es','en'], 
+      File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'i18n')))
+
+  end
+
   # 
   # Instances of this class represent payment method. 
   #
@@ -56,12 +64,13 @@ module Payments
   #
   class PaymentMethod
      
-     attr_accessor :id, :title, :description, :opts
+     attr_accessor :id, :title, :description, :icon, :opts
    
      def initialize(id, opts={})
        @id = id
        @title = opts.delete(:title)
        @description = opts.delete(:description)
+       @icon = opts.delete(:icon)
        @opts = opts
        PaymentMethod.payment_methods << self
      end
@@ -93,9 +102,11 @@ module Payments
      #
      def self.available
 
+       av_payment_methods = SystemConfiguration::Variable.
+         get_value('payments.available_methods').split(',').map{|item| item.to_sym}
+
        all.select do |payment_method|
-       	  SystemConfiguration::Variable.get_value('payments.available_methods')
-       	    .split(',').map{|item| item.to_sym}.include? payment_method.id
+       	  av_payment_methods.include? payment_method.id
        end
 
      end
@@ -130,6 +141,10 @@ module Payments
        amount = opts[:amount]
        currency = opts[:currency]
 
+     end
+
+     def to_json(*args)
+       {:id => id, :title => title, :description => description, :icon => icon}.to_json
      end
 
      private
