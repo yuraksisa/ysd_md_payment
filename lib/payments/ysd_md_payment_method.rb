@@ -4,7 +4,7 @@ require 'ysd_md_configuration' unless defined?System::Variable
 module Payments
   
   def self.r18n
-
+    
     @@local_i18n ||= R18n::I18n.new(['es','en'], 
       File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'i18n')))
 
