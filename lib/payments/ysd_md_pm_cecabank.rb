@@ -19,11 +19,8 @@ module Payments
     #
     # @return [String] The form to post to the gateway
     #
-    def charge_form(charge={})
+    def charge_form(charge)
     
-      num_operacion = charge[:reference]
-      importe = charge[:amount]
-
       result = <<-EOF 
         <form action="<%=ceca_url%>" method="POST" 
               enctype="application/x-www-form-urlencoded">
@@ -45,8 +42,8 @@ module Payments
       EOF
 
       template = Tilt.new('erb'){result}
-      template.render(self, {:num_operacion => num_operacion, 
-      	                     :importe => importe})      
+      template.render(self, {:num_operacion => charge.id, 
+      	                     :importe => charge.amount})      
 
     end
 

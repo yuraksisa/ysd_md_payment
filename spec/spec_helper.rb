@@ -12,7 +12,7 @@ end
 
 DataMapper::Logger.new(STDOUT, :debug)
 DataMapper.setup :default, "sqlite3::memory:"
-DataMapper::Model.raise_on_save_failure = false
+DataMapper::Model.raise_on_save_failure = true
 DataMapper.finalize 
 
 DataMapper.auto_migrate!

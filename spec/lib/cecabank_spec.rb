@@ -4,12 +4,13 @@ describe "Cecabank gateway payment" do
 
   describe "uno" do
 
+    let(:charge) { Payments::Charge.create({:amount => 150})}
     let(:cecabank) { Payments::PaymentMethod.get(:cecabank)}
 
     it "should" do
       
       puts "cecabank: #{cecabank.description}"
-      puts "cecabank chargeform: #{cecabank.charge_form({:amount => 150.00, :reference => '1234567890'})}"
+      puts "cecabank chargeform: #{cecabank.charge_form(charge)}"
     
     end
 	

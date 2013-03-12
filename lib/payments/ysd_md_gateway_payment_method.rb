@@ -53,7 +53,7 @@ module Payments
      # @return [String] The form to post to the gateway
      #
      #
-     def charge_form(charge={})
+     def charge_form(charge)
        raise "This method has to be defined on the concrete implementations"
      end
 
