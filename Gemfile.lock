@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ysd_md_payment (0.2.5)
+    ysd_md_payment (0.2.6)
       data_mapper (= 1.2.0)
       json
       r18n-core

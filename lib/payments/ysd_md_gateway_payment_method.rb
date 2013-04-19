@@ -48,12 +48,23 @@ module Payments
      #
      # Get the form to do the POST to the gateway
      #
-     # @param [Hash] The charge information
+     # @param [Payments::Charge] The charge 
      #
      # @return [String] The form to post to the gateway
      #
      #
      def charge_form(charge)
+       raise "This method has to be defined on the concrete implementations"
+     end
+     
+     #
+     # Get the charge detail to respond to the payment gateway
+     #
+     # @param [Payments::Charge] The charge
+     #
+     # @return [Object] The data to respond to the gateway
+     # 
+     def charge_detail(charge)
        raise "This method has to be defined on the concrete implementations"
      end
 

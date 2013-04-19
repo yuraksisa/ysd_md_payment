@@ -3,7 +3,34 @@ require 'data_mapper' unless defined?DataMapper
 module Payments
 
   #
-  # It represents a charge
+  # It represents a charge.
+  #
+  # A charge usually has a source that origins the charge. For example an 
+  # order, a donation, a booking, ...
+  #
+  # To define the charge source you have to do the following :
+  #
+  # - In your charge source model, define a belongs_to property that links to
+  #   to the charge
+  #
+  #   module Orders
+  #     class Order 
+  #       include DataMapper::Resource
+  #       ...
+  #       belongs_to :charge, 'Payments::Charge'
+  #     end
+  #   end
+  #
+  # - Open the Charge class to include the other part of the relationship, a
+  #   has 1. The source have to be named xxx_charge_source to get retrieved
+  #   by the charge_source method
+  #
+  #   module Payments
+  #     class Charge
+  #       has 1, :order_charge_source, 'Orders::Order'
+  #     end
+  #   end
+  #
   #
   class Charge
     include DataMapper::Resource
@@ -16,12 +43,69 @@ module Payments
     property :currency, String, :field => 'currency', :length => 3
     property :status, Enum[:pending, :denied, :done], :field => 'status', :default => :pending
     property :payment_method_id, String, :field => 'payment_method_id', :length => 30
+    
+    @loaded_charge_source = false
+    @charge_source = nil
 
     #
     # Gets the payment method instance
-    # 
+    #
+    # @return [PaymentMethod] The payment method instance 
     def payment_method
      @payment_method ||= PaymentMethod.get(payment_method_id.to_sym)
+    end
+
+    #
+    # Gets the source of the charge
+    #
+    # @return [Object] the source of the charge
+    def charge_source
+      unless @loaded_charge_source 
+        @charge_source = load_charge_source
+        @loaded_charge_source = true
+      end
+
+      return @charge_source 
+
+    end
+    
+    #
+    # Charge detail
+    #
+    # @return [Array] Array of hashes with the following information
+    #
+    #    :item_reference
+    #    :item_description
+    #    :item_units
+    #    :item_price
+    #
+    def detail
+      
+      result = []
+
+      if charge_source and charge_source.respond_to?(:charge_detail)
+        result.concat(charge_source.charge_detail)
+      end  
+
+      return result
+
+    end
+
+    private
+    
+    #
+    # Load the charge source
+    #
+    # @return [Object] the charge source
+    #
+    def load_charge_source
+
+      candidates = relationships.select do |relationship|
+         relationship.name =~ /_charge_source/ and (not relationship.get(self).nil?)
+      end
+
+      return (candidates.size>0)?candidates.first.get(self):nil
+
     end
 
   end

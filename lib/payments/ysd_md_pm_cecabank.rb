@@ -1,6 +1,5 @@
 require 'tilt' unless defined?Tilt
 require 'digest/sha1' unless defined? Digest::SHA1
-require 'r18n-core'
 
 #
 # It represents the CECABANK payment
@@ -23,7 +22,8 @@ module Payments
     
       result = <<-EOF 
         <form action="<%=ceca_url%>" method="POST" 
-              enctype="application/x-www-form-urlencoded">
+              enctype="application/x-www-form-urlencoded"
+              name="gateway">
           <input name="MerchantId" type="hidden" value="<%=merchant_id%>"/>
           <input name="AcquirerId" type="hidden" value="<%=acquirer_id%>"/>
           <input name="TerminalId" type="hidden" value="<%=terminal_id%>"/>
@@ -33,12 +33,17 @@ module Payments
                  value="<%=firma(num_operacion, importe)%>"/>
           <input name="Cifrado" type="hidden" value="SHA1"/>        
           <input name="Num_operacion" type="hidden" value="<%=num_operacion%>">
-          <input name="Importe" value="<%=format_amount(importe)%>">
-          <input name="TipoMoneda" value="978"/>
-          <input name="Exponente" value="2"/>
-          <input name="Pago_soportado" value="SSL"/>
-          <input name="Idioma" value="1"/>
+          <input name="Importe" type="hidden" value="<%=format_amount(importe)%>">
+          <input name="TipoMoneda" type="hidden" value="978"/>
+          <input name="Exponente" type="hidden" value="2"/>
+          <input name="Pago_soportado" type="hidden" value="SSL"/>
+          <input name="Idioma" type="hidden" value="1"/>
         </form>
+        <script type="text/javascript">
+          window.onload = function() {
+            document.forms['gateway'].submit();
+          }
+        </script>        
       EOF
 
       template = Tilt.new('erb'){result}
@@ -50,31 +55,31 @@ module Payments
     private
 
     def ceca_url
-       "http://tpv.ceca.es:8000/cgi-bin/tpv"
+      SystemConfiguration::SecureVariable.get_value('payments.cecabank.url')
     end
 
     def merchant_id
-      "123456789"
+      SystemConfiguration::SecureVariable.get_value('payments.cecabank.merchant_id')
     end
 
     def acquirer_id
-      "1234567890"
+      SystemConfiguration::SecureVariable.get_value('payments.cecabank.acquirer_id')
     end
 
     def terminal_id
-      "12345678"
+      SystemConfiguration::SecureVariable.get_value('payments.cecabank.terminal_id')
     end
     
     def clave_encriptacion
-       "12345678"
+      SystemConfiguration::SecureVariable.get_value('payments.cecabank.clave_encriptacion')
     end
 
     def url_ok
-      "http://localhost:5000/ok"
+      SystemConfiguration::SecureVariable.get_value('payments.cecabank.url_ok')
     end
 
     def url_nok
-      "http://localhost:5000/nok"
+      SystemConfiguration::SecureVariable.get_value('payments.cecabank.url_nok')
     end
 
     #

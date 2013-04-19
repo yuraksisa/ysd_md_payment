@@ -1,3 +1,4 @@
+require 'r18n-core' unless defined?R18n::I18n
 require 'json' unless defined?JSON
 require 'ysd_md_configuration' unless defined?System::Variable
 
