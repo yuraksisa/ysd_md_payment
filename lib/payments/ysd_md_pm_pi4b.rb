@@ -12,15 +12,17 @@ module Payments
     def charge_form(charge)
 
       result = <<-EOF
+        <html>
+        <body>
         <form action="#{pi4b_url}" method="POST" name="gateway">
           <input type="hidden" name="order" value="#{charge.id}">
           <input type="hidden" name="store" value="#{merchant_id}">
         </form>
         <script type="text/javascript">
-          window.onload = function() {
-            document.forms['gateway'].submit();
-          }
+          document.forms["gateway"].submit();
         </script>
+        </body>
+        </html>
       EOF
       
     end
@@ -28,12 +30,12 @@ module Payments
     #
     # Define the response when the payment gateway request information
     #
-    # @param [Hash] request parameters
+    # @param [Hash] parameters
     #
-    def charge_detail(request_parameters)
+    def charge_detail(opts={})
       
-      store = request_parameters[:store]
-      charge_id = request_parameters[:order]
+      merchant_id = opts[:merchant_id]
+      charge_id   = opts[:charge_id]
 
       if charge_id and charge = Payments::Charge.get(charge_id)
         result = []
@@ -45,7 +47,7 @@ module Payments
           result << charge_detail[:item_units]
           result << format_amount(charge_detail[:item_price])
         end
-        result.join('\n')
+        result.join('\r\n')
       else
         nil
       end

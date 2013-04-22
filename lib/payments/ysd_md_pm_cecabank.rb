@@ -21,6 +21,8 @@ module Payments
     def charge_form(charge)
     
       result = <<-EOF 
+        <html>
+        <body>
         <form action="<%=ceca_url%>" method="POST" 
               enctype="application/x-www-form-urlencoded"
               name="gateway">
@@ -40,10 +42,10 @@ module Payments
           <input name="Idioma" type="hidden" value="1"/>
         </form>
         <script type="text/javascript">
-          window.onload = function() {
-            document.forms['gateway'].submit();
-          }
-        </script>        
+          document.forms["gateway"].submit();
+        </script>
+        </body>
+        </html>
       EOF
 
       template = Tilt.new('erb'){result}

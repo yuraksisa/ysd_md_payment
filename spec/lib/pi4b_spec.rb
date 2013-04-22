@@ -38,7 +38,7 @@ describe "PI4B gateway payment" do
       result << "CLASE A"
       result << "1"
       result << "15000"
-      result.join('\n')
+      result.join('\r\n')
   end
   
   describe ".charge_form" do
@@ -63,7 +63,7 @@ describe "PI4B gateway payment" do
         charge.should_receive(:detail).any_number_of_times.and_return(charge_detail_data)
       end
 
-      subject { pi4b.charge_detail(:store => '1234', :order => charge.id) }
+      subject { pi4b.charge_detail(:merchant_id => '1234', :charge_id => charge.id) }
       it { should == charge_detail }
     end
 
