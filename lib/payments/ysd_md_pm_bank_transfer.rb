@@ -1,3 +1,5 @@
+require 'ysd_md_configuration' unless defined?SystemConfiguration::SecureVariable
+
 module Payments
  
  module BankTransfer
@@ -6,21 +8,19 @@ module Payments
      super %  {:bank_name => bank_name, :account_number => account_number}
    end
 
-   private
-
    def bank_name
-     "La Caixa"
+     SystemConfiguration::SecureVariable.get_value('payments.bank_transfer.bank_name')
    end
 
    def account_number
-     "1234-5678-90-1234567890"
+     SystemConfiguration::SecureVariable.get_value('payments.bank_transfer.account')
    end
 
  end
 
  bank_transfer = OfflinePaymentMethod.new(:bank_transfer,
-   :title => Payments.r18n.t.bank_transfer.title,
-   :description => Payments.r18n.t.bank_transfer.description)
+   :title => lambda{Payments.r18n.t.bank_transfer.title},
+   :description => lambda{Payments.r18n.t.bank_transfer.description})
 
  bank_transfer.extend BankTransfer
 

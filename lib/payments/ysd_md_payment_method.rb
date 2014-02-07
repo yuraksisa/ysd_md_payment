@@ -1,13 +1,14 @@
-require 'r18n-core' unless defined?R18n::I18n
 require 'json' unless defined?JSON
 require 'ysd_md_configuration' unless defined?System::Variable
+require 'ysd_md_translation' unless defined?Yito::Translation
 
 module Payments
-  
+ 
+  extend Yito::Translation::ModelR18
+
   def self.r18n
     
-    @@local_i18n ||= R18n::I18n.new(['es','en'], 
-      File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'i18n')))
+    check_r18n!(:payments_r18n, File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'i18n')))
 
   end
 
@@ -65,7 +66,7 @@ module Payments
   #
   class PaymentMethod
      
-     attr_accessor :id, :title, :description, :icon, :opts
+     attr_accessor :id, :icon, :opts
    
      def initialize(id, opts={})
        @id = id
@@ -74,6 +75,22 @@ module Payments
        @icon = opts.delete(:icon)
        @opts = opts
        PaymentMethod.payment_methods << self
+     end
+
+     def title
+       if @title.is_a?Proc
+         @title.call
+       else
+         @title
+       end
+     end
+
+     def description
+       if @description.is_a?Proc
+         @description.call
+       else
+         @description
+       end
      end
 
      #

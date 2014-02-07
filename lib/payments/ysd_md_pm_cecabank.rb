@@ -112,8 +112,8 @@ module Payments
   end
   
   cecabank = GatewayPaymentMethod.new(:cecabank,
-    :title => Payments.r18n.t.cecabank.title,
-    :description => Payments.r18n.t.cecabank.description,
+    :title => lambda{Payments.r18n.t.cecabank.title},
+    :description => lambda{Payments.r18n.t.cecabank.description},
     :icon => 'http://www.credit-card-logos.com/images/multiple_credit-card-logos-1/credit_card_logos_3.gif') 
 
   cecabank.extend CecaBankPayment  

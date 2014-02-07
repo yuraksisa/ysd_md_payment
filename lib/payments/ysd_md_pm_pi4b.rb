@@ -9,7 +9,7 @@ module Payments
     #
     # Defines the charge form used to start the process
     #
-    def charge_form(charge)
+    def charge_form(charge, opts={})
 
       result = <<-EOF
         <html>
@@ -17,6 +17,7 @@ module Payments
         <form action="#{pi4b_url}" method="POST" name="gateway">
           <input type="hidden" name="order" value="#{charge.id}">
           <input type="hidden" name="store" value="#{merchant_id}">
+          <input type="hidden" name="lang" value="#{opts[:language]||'es'}">
         </form>
         <script type="text/javascript">
           document.forms["gateway"].submit();
@@ -70,8 +71,8 @@ module Payments
 
 
   pi4b = GatewayPaymentMethod.new(:pi4b,
-    :title => Payments.r18n.t.pi4b.title,
-    :description => Payments.r18n.t.pi4b.description,
+    :title => lambda{ Payments.r18n.t.pi4b.title},
+    :description => lambda{Payments.r18n.t.pi4b.description},
     :icon => 'http://www.credit-card-logos.com/images/multiple_credit-card-logos-1/credit_card_logos_3.gif')
   pi4b.extend PI4BPayment
   

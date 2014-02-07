@@ -18,15 +18,17 @@ describe "PI4B gateway payment" do
   
   let(:charge_form) do
       result = <<-EOF
+        <html>
+        <body>
         <form action="http://prueba.com" method="POST" name="gateway">
           <input type="hidden" name="order" value="#{charge.id}">
           <input type="hidden" name="store" value="123456">
         </form>
         <script type="text/javascript">
-          window.onload = function() {
-            document.forms['gateway'].submit();
-          }
+          document.forms["gateway"].submit();
         </script>
+        </body>
+        </html>
       EOF
   end
   

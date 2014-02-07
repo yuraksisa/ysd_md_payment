@@ -1,15 +1,22 @@
+# encoding: utf-8
 cecabank:
   title: Visa o Mastercard, pago seguro
   description: >
                El pago se realiza a través de pasarela de pago. Es un pago
                seguro, los datos de su tarjeta sólo son vistos por la entidad
                bancaria. Se admite Visa, Mastercard y American Express.
+#pi4b:
+#  title: Uno
+#  description: Dos
+#bank_transfer:
+#  title: Tres
+#  description: Cuatro
 pi4b:
   title: Visa o Mastercard, pago seguro
   description: >
                El pago se realiza a través de pasarela de pago. Es un pago
                seguro, los datos de su tarjeta sólo son vistos por la entidad
-               bancaria. Se admite Visa y Mastercard.
+               bancaria. Se admite Visa y Mastercard. <a href="/payments/4binfo" target="_blank">Ayuda?</a>
 bank_transfer:
   title: Transferencia bancaria
   description: >

@@ -9,7 +9,7 @@ pi4b:
   description: >
                The payment is make through a payment gateway. It's a secure
                payment. Your credit card data are only viewed by the bank.
-               Visa and Mastercard are admitted.
+               Visa and Mastercard are admitted. <a href="/payments/4binfo" target="_blank">Help?</a>
 bank_transfer:
   title: Bank transfer
   description: >

@@ -1,4 +1,6 @@
 require 'data_mapper' unless defined?DataMapper
+require 'dm-types'
+require 'ysd_md_yito' unless defined?Yito::Model::Finder
 
 module Payments
 
@@ -33,7 +35,8 @@ module Payments
   #
   #
   class Charge
-    include DataMapper::Resource
+    include DataMapper::Resource    
+    extend Yito::Model::Finder
 
     storage_names[:default] = 'payment_charges'
 
@@ -46,6 +49,13 @@ module Payments
     
     @loaded_charge_source = false
     @charge_source = nil
+
+    def update(attributes)
+      transaction do |t|
+        super(attributes)
+        t.commit
+      end
+    end
 
     #
     # Gets the payment method instance
@@ -90,7 +100,19 @@ module Payments
       return result
 
     end
+    
+    #
+    # Add the charge source
+    #
+    def as_json(opts={})
+      
+      methods = opts[:methods] || []
+      methods << :charge_source
 
+      super(opts.merge({:methods => methods}))
+
+    end
+    
     private
     
     #
