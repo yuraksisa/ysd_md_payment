@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "ysd_md_configuration"
   s.add_runtime_dependency "ysd_md_yito"
   s.add_runtime_dependency "ysd_md_translation"
+  s.add_runtime_dependency "ysd_core_plugins"
 
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
