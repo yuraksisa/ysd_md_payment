@@ -17,6 +17,11 @@ pi4b:
                El pago se realiza a través de pasarela de pago. Es un pago
                seguro, los datos de su tarjeta sólo son vistos por la entidad
                bancaria. Se admite Visa y Mastercard. <a href="/payments/4binfo" target="_blank">Ayuda?</a>
+paypal_standard:
+  title: Paypal y tarjetas
+  description: >
+               El pago se realiza a través de paypal. Es un pago
+               seguro. Se admite Paypal, Visa y Mastercard.
 bank_transfer:
   title: Transferencia bancaria
   description: >
