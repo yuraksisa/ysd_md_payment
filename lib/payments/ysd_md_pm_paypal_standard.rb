@@ -65,7 +65,8 @@ module Payments
     end
 
     def paypal_standard_url
-      SystemConfiguration::SecureVariable.get_value('payments.paypal_standard.url')
+      paypal_base = SystemConfiguration::SecureVariable.get_value('payments.paypal_standard.url')
+      "#{paypal_base}/cgi-bin/webscr"
     end
 
     def paypal_standard_business
