@@ -34,7 +34,7 @@ module Payments
       item_name = (charge.detail.size > 0 and charge.detail.first.has_key?(:item_description)) ? charge.detail.first[:item_description] : ""
       
       template = Tilt.new('erb'){result}
-      template.render(self, {:num_operacion => charge.id, 
+      template.render(self, {:num_operacion => format_num_operacin(charge.id), 
       	                     :currency => charge.currency,
       	                     :amount => format_amount(charge.amount),
       	                     :item_name => item_name,

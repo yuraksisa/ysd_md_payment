@@ -5,6 +5,12 @@ cecabank:
                El pago se realiza a través de pasarela de pago. Es un pago
                seguro, los datos de su tarjeta sólo son vistos por la entidad
                bancaria. Se admite Visa, Mastercard y American Express.
+redsys:
+  title: Visa o Mastercard, pago seguro
+  description: >
+               El pago se realiza a través de pasarela de pago. Es un pago
+               seguro, los datos de su tarjeta sólo son vistos por la entidad
+               bancaria. Se admite Visa, Mastercard y American Express.
 #pi4b:
 #  title: Uno
 #  description: Dos
