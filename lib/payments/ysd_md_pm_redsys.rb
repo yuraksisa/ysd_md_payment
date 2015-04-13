@@ -11,7 +11,7 @@ module Payments
   #
   module RedsysPayment
 
-    def charge_form(the_charge, opts)
+    def charge_form(charge, opts)
     
       result = <<-EOF 
         <html>
@@ -38,11 +38,22 @@ module Payments
       EOF
 
       template = Tilt.new('erb'){result}
-      template.render(self, {:num_operacion => format_num_operacion(the_charge.id), 
-                             :amount => format_amount(the_charge.amount),
-                             :firma => firma(format_num_operacion(the_charge.id), format_amount(the_charge.amount))
+      template.render(self, {:num_operacion => format_num_operacion(charge.id), 
+                             :amount => format_amount(charge.amount),
+                             :firma => firma(format_num_operacion(charge.id), format_amount(charge.amount))
                             })      
 
+    end
+
+    def calculate_response_signature(num_operation, amount, response_code, currency, merchant_id)
+      texto = ""
+      texto << amount
+      texto << num_operation
+      texto << merchant_id
+      texto << currency
+      texto << response_code
+      texto << clave_encriptacion
+      Digest::SHA1.hexdigest(texto).upcase
     end
 
     private
