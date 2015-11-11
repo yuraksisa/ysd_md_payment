@@ -10,6 +10,12 @@ redsys:
                The payment is make through a payment gateway. It's a secure
                payment. Your credit card data are only viewed by the bank.
                Visa, Mastercard and American Express are admitted.
+redsys256:
+  title: Visa or Mastercard, secure payment
+  description: >
+               The payment is make through a payment gateway. It's a secure
+               payment. Your credit card data are only viewed by the bank.
+               Visa, Mastercard and American Express are admitted.
 pi4b:
   title: Visa or Mastercard, secure payment
   description: >
