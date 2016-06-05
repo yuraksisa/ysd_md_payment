@@ -7,5 +7,6 @@ require 'payments/ysd_md_pm_bank_transfer'
 require 'payments/ysd_md_pm_paypal_standard'
 require 'payments/ysd_md_pm_redsys'
 require 'payments/ysd_md_pm_redsys256'
+require 'payments/ysd_md_pm_santander'
 require 'payments/ysd_md_charge'
 
