@@ -58,18 +58,6 @@ module Payments
                               :santander_4b_url => santander_4b_url
                             })       
 
-      p "id_cliente: #{id_cliente}"
-      p "nombre_cuenta: #{nombre_cuenta}"
-      p "secreto_compartido: #{secreto_compartido}"
-      
-      p "order_id: #{the_order_id}"
-      p "amount: #{the_amount}"
-      p "timestamp: #{the_timestamp}"
-      p "currency: #{the_currency}"
-      p "signature: #{the_signature}"
-
-      p "form value: #{form_value}"
-
       return form_value
 
     end
