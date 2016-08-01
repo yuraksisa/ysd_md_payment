@@ -33,3 +33,13 @@ bank_transfer:
                Make a bank transfer to the following bank account:
                %{bank_name}
                %{account_number}
+payment_methods:
+  credit_card: Credit card
+  redsys256: Virtual TPV
+  santander: Virtual TPV
+  pi4b: Virtual TPV
+  cecabank: Virtual TPV
+  redsys: Virtual TPV  
+  paypal_standard: Paypal
+  cash: Cash
+  bank_transfer: Bank transfer               

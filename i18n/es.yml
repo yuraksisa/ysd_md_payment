@@ -40,3 +40,13 @@ bank_transfer:
                Realice la transferencia bancaria en la siguiente cuenta:
                %{bank_name}
                %{account_number}
+payment_methods:
+  credit_card: Tarjeta
+  redsys256: TPV Virtual
+  santander: TPV Virtual
+  pi4b: TPV Virtual
+  cecabank: TPV Virtual
+  redsys: TPV Virtual
+  paypal_standard: Paypal
+  cash: Efectivo
+  bank_transfer: Transferencia
