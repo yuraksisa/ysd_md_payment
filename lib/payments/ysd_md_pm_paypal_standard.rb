@@ -50,13 +50,25 @@ module Payments
     end
 
     def return_url_ok
-       site_domain = SystemConfiguration::Variable.get_value("site.domain")
-    	"#{site_domain}/charge-return/paypal-standard"
+      # In case of detached front-end there are two domains (front-end and backoffice) 
+      return_site_url = SystemConfiguration::Variable.get_value("payments.return_site_url", nil)
+      if !return_site_url.nil? && !return_site_url.empty?
+        return_site_url
+      else  
+        site_domain = SystemConfiguration::Variable.get_value("site.domain")
+      	"#{site_domain}/charge-return/paypal-standard"
+      end  
     end
 
     def return_url_cancel
-       site_domain = SystemConfiguration::Variable.get_value("site.domain")
-       "#{site_domain}/charge-return/paypal-standard/cancel"
+      # In case of detached front-end there are two domains (front-end and backoffice) 
+      return_site_url = SystemConfiguration::Variable.get_value("payments.return_site_url", nil)
+      if !return_site_url.nil? && !return_site_url.empty?
+        return_site_url
+      else  
+        site_domain = SystemConfiguration::Variable.get_value("site.domain")
+        "#{site_domain}/charge-return/paypal-standard/cancel"
+      end  
     end
 
     def notify_url
