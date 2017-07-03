@@ -74,6 +74,7 @@ module Payments
       signature << ns_num_operacion
       signature << ns_importe
       signature << ns_tipo_moneda
+      signature << ns_exponente
       signature << ns_referencia
 
       p "calculating notification signature: #{signature}"
