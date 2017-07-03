@@ -63,7 +63,7 @@ module Payments
                                ns_num_operacion, 
                                ns_importe, 
                                ns_tipo_moneda,
-                               ns_exponente, 
+                               ns_exponente,
                                ns_referencia)
 
       signature = ""
@@ -74,10 +74,9 @@ module Payments
       signature << ns_num_operacion
       signature << ns_importe
       signature << ns_tipo_moneda
-      signature << ns_exponente
-      signature << 'SHA2'
-      signature << url_ok
-      signature << url_nok
+      signature << ns_referencia
+
+      p "calculating notification signature: #{signature}"
 
       Digest::SHA256.hexdigest signature
 
@@ -105,6 +104,8 @@ module Payments
       signature << url_ok
       signature << url_nok
 
+      p "calculating signature: #{signature}"
+
       Digest::SHA256.hexdigest signature
 
     end
@@ -113,7 +114,7 @@ module Payments
     # Format the amount to send it
     #
     def format_amount(amount)
-      ("%.2f" % amount).gsub('.','')
+      ("%.2f" % amount).gsub('.','').rjust(12,'0')
     end
 
     def ceca_url
