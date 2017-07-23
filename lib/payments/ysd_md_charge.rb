@@ -46,10 +46,11 @@ module Payments
     property :currency, String, :field => 'currency', :length => 3
     property :status, Enum[:pending, :processing, :denied, :done, :refunded], :field => 'status', :default => :pending
     property :payment_method_id, String, :field => 'payment_method_id', :length => 30
+    property :origin, String, :field => 'origin'
     
     @loaded_charge_source = false
     @charge_source = nil
-
+    
     #
     # Refund the charge
     #
@@ -119,7 +120,7 @@ module Payments
       super(opts.merge({:methods => methods}))
 
     end
-    
+
     private
     
     #
