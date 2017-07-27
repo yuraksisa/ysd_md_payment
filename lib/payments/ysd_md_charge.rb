@@ -83,10 +83,25 @@ module Payments
         @loaded_charge_source = true
       end
 
-      return @charge_source 
+      return @charge_source
+    end
+
+    #
+    # Get the charge order if the source
+    #
+    def charge_order
+
+      _charge_source = charge_source
+
+      if _charge_source
+        index = _charge_source.charge_source.charges.select { |c| c.status == :done }.sort { |x,y| x.date <=> y.date }.find_index(self)
+        index += 1 unless index.nil?
+      else
+        return 0
+      end
 
     end
-    
+
     #
     # Charge detail
     #
