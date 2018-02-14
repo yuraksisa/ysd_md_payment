@@ -128,7 +128,22 @@ module Payments
        end
 
      end
-     
+
+     #
+     # Retrieve the payment methods available for the current application,
+     # taking into account compatibilities
+     #
+     def self.available_to_web
+
+       payment_methods = Payments::PaymentMethod.available
+       paypal_payment_method = payment_methods.select { |payment_method| payment_method.id == :paypal_standard}
+       payment_methods.keep_if { |payment_method| payment_method.id != :paypal_standard}
+       paypal = (paypal_payment_method.size == 1)
+
+       OpenStruct.new({tpv_virtual: payment_methods.first, paypal: paypal})
+
+     end
+
      #
      # Configure the available payment methods
      #
