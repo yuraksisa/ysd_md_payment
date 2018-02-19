@@ -11,6 +11,40 @@ module Payments
   #
   module CecaBankPayment
 
+    CECABANK_URL_PRODUCTION_URL = "https://pgw.ceca.es/cgi-bin/tpv"
+    CECABANK_URL_TEST_URL = "http://tpv.ceca.es:8000"
+
+    #
+    # Get the configuration
+    #
+    def configuration(sales_channel_code=nil)
+
+      sales_channel_payment = ::Yito::Model::SalesChannel::SalesChannelPayment.first('sales_channel.code' => sales_channel_code) unless sales_channel_code.nil?
+
+      # Check if use the default payment configuration or the sales_channel's one
+      default_payment_configuration = (sales_channel_code.nil? or sales_channel_payment.nil? or (!sales_channel_payment.nil? and sales_channel_payment.override_payment))
+
+      # Set up cecabank gateway variables (ceca_url, merchant_id, acquirer_id, terminal_id, clave_encriptacion, url_ok, url_nok)
+      # cecabank notification url is setup in the platform back-office
+      environment_variable = default_payment_configuration ? 'payments.cecabank.environment' : "payments.cecabank.environment_sc_#{sales_channel_code}"
+      merchant_id_variable = default_payment_configuration ? 'payments.cecabank.merchant_id' : "payments.cecabank.merchant_id_sc_#{sales_channel_code}"
+      acquirer_id_variable = default_payment_configuration ? 'payments.cecabank.acquirer_id' : "payments.cecabank.acquirer_id_sc_#{sales_channel_code}"
+      terminal_id_variable = default_payment_configuration ? 'payments.cecabank.terminal_id' : "payments.cecabank.terminal_id_sc_#{sales_channel_code}"
+      clave_encriptacion_variable = default_payment_configuration ? 'payments.cecabank.clave_encriptacion' : "payments.cecabank.clave_encriptacion_sc_#{sales_channel_code}"
+      url_ok_variable = default_payment_configuration ? 'payments.cecabank.url_ok' : "payments.cecabank.url_ok_sc_#{sales_channel_code}"
+      url_nok_variable = default_payment_configuration ? 'payments.cecabank.url_nok' : "payments.cecabank.url_nok_sc_#{sales_channel_code}"
+
+      # Build the configuration
+      {ceca_url: SystemConfiguration::SecureVariable.get_value(environment_variable) == 'production' ? CECABANK_URL_PRODUCTION_URL : CECABANK_URL_TEST_URL,
+       merchant_id: SystemConfiguration::SecureVariable.get_value(merchant_id_variable),
+       acquirer_id: SystemConfiguration::SecureVariable.get_value(acquirer_id_variable),
+       terminal_id: SystemConfiguration::SecureVariable.get_value(terminal_id_variable),
+       clave_encriptacion: SystemConfiguration::SecureVariable.get_value(clave_encriptacion_variable),
+       url_ok: SystemConfiguration::SecureVariable.get_value(url_ok_variable),
+       url_nok: SystemConfiguration::SecureVariable.get_value(url_nok_variable)}
+
+    end
+
     #
     # Implementation
     #
@@ -19,7 +53,9 @@ module Payments
     # @return [String] The form to post to the gateway
     #
     def charge_form(charge, opts)
-    
+
+      gateway_configuration = configuration(charge.sales_channel_code)
+
       result = <<-EOF 
         <html>
         <body>
@@ -49,8 +85,15 @@ module Payments
       EOF
 
       template = Tilt.new('erb'){result}
-      template.render(self, {:num_operacion => charge.id.to_s,
-      	                     :importe => charge.amount})      
+      template.render(self, {num_operacion: charge.id.to_s,
+      	                     importe: charge.amount,
+                             ceca_url: gateway_configuration[:ceca_url],
+                             merchant_id: gateway_configuration[:merchant_id],
+                             acquirer_id: gateway_configuration[:acquirer_id],
+                             terminal_id: gateway_configuration[:terminal_id],
+                             url_ok: gateway_configuration[:url_ok],
+                             url_nok: gateway_configuration[:url_nok],
+                            })
 
     end
 
@@ -118,33 +161,37 @@ module Payments
       ("%.2f" % amount).gsub('.','').rjust(12,'0')
     end
 
-    def ceca_url
-      SystemConfiguration::SecureVariable.get_value('payments.cecabank.url')
-    end
+    #def ceca_environment
+    #  SystemConfiguration::SecureVariable.get_value('payments.cecabank.environment')
+    #end
 
-    def merchant_id
-      SystemConfiguration::SecureVariable.get_value('payments.cecabank.merchant_id')
-    end
+    #def ceca_url
+    #  SystemConfiguration::SecureVariable.get_value('payments.cecabank.url')
+    #end
 
-    def acquirer_id
-      SystemConfiguration::SecureVariable.get_value('payments.cecabank.acquirer_id')
-    end
+    #def merchant_id
+    #  SystemConfiguration::SecureVariable.get_value('payments.cecabank.merchant_id')
+    #end
 
-    def terminal_id
-      SystemConfiguration::SecureVariable.get_value('payments.cecabank.terminal_id')
-    end
+    #def acquirer_id
+    #  SystemConfiguration::SecureVariable.get_value('payments.cecabank.acquirer_id')
+    #end
+
+    #def terminal_id
+    #  SystemConfiguration::SecureVariable.get_value('payments.cecabank.terminal_id')
+    #end
     
-    def clave_encriptacion
-      SystemConfiguration::SecureVariable.get_value('payments.cecabank.clave_encriptacion')
-    end
+    #def clave_encriptacion
+    #  SystemConfiguration::SecureVariable.get_value('payments.cecabank.clave_encriptacion')
+    #end
 
-    def url_ok
-      SystemConfiguration::SecureVariable.get_value('payments.cecabank.url_ok')
-    end
+    #def url_ok
+    #  SystemConfiguration::SecureVariable.get_value('payments.cecabank.url_ok')
+    #end
 
-    def url_nok
-      SystemConfiguration::SecureVariable.get_value('payments.cecabank.url_nok')
-    end
+    #def url_nok
+    #  SystemConfiguration::SecureVariable.get_value('payments.cecabank.url_nok')
+    #end
 
   end
   

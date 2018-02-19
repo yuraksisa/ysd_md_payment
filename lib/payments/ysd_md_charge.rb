@@ -47,7 +47,8 @@ module Payments
     property :status, Enum[:pending, :processing, :denied, :done, :refunded], :field => 'status', :default => :pending
     property :payment_method_id, String, :field => 'payment_method_id', :length => 30
     property :origin, String, :field => 'origin'
-    
+    property :sales_channel_code, String, length: 50
+
     @loaded_charge_source = false
     @charge_source = nil
     
