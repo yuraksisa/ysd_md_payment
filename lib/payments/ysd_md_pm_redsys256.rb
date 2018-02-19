@@ -12,7 +12,7 @@ module Payments
   module Redsys256Payment
 
     REDSYS256_URL_PRODUCTION_URL = "https://sis.redsys.es/sis/realizarPago"
-    REDSYS256_URL_TEST_URL = "https://sis-t.sermepa.es:25443/sis/realizarPago"
+    REDSYS256_URL_TEST_URL = "https://sis-t.redsys.es:25443/sis/realizarPago"
 
     #
     # Get the configuration
