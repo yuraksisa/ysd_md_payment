@@ -93,6 +93,7 @@ module Payments
                              terminal_id: gateway_configuration[:terminal_id],
                              url_ok: gateway_configuration[:url_ok],
                              url_nok: gateway_configuration[:url_nok],
+                             firma: firma(num_operacion, format_amount(charge.amount), gateway_configuration)
                             })
 
     end
@@ -109,8 +110,11 @@ module Payments
                                ns_exponente,
                                ns_referencia)
 
+      charge = Charge.get(ns_num_operation.to_i)
+      configuration = configuration(charge.nil? ? nil : charge.sales_channel_code)
+
       signature = ""
-      signature << clave_encriptacion
+      signature << configuration[:clave_encriptacion]
       signature << ns_merchant_id
       signature << ns_acquirer_bin
       signature << ns_terminal_id
@@ -133,20 +137,20 @@ module Payments
     #
     # @return [String]
     #
-    def firma(num_operacion, importe)
+    def firma(num_operacion, importe, configuration)
 
       signature = ""
-      signature << clave_encriptacion
-      signature << merchant_id
-      signature << acquirer_id
-      signature << terminal_id
+      signature << configuration[:clave_encriptacion]
+      signature << configuration[:merchant_id]
+      signature << configuration[:acquirer_id]
+      signature << configuration[:terminal_id]
       signature << num_operacion
       signature << importe
       signature << '978'
       signature << '2'
       signature << 'SHA2'
-      signature << url_ok
-      signature << url_nok
+      signature << configuration[:url_ok]
+      signature << configuration[:url_nok]
 
       p "calculating signature: #{signature}"
 
