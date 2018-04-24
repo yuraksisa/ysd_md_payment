@@ -110,7 +110,7 @@ module Payments
                                ns_exponente,
                                ns_referencia)
 
-      charge = Charge.get(ns_num_operation.to_i)
+      charge = Charge.get(ns_num_operacion.to_i)
       configuration = configuration(charge.nil? ? nil : charge.sales_channel_code)
 
       signature = ""
