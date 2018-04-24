@@ -68,10 +68,10 @@ module Payments
           <input name="URL_OK" type="hidden" value="<%=url_ok%>"/>
           <input name="URL_NOK" type="hidden" value="<%=url_nok%>"/>
           <input name="Firma" type="hidden" 
-                 value="<%=firma(num_operacion, format_amount(importe))%>"/>
+                 value="<%=firma%>"/>
           <input name="Cifrado" type="hidden" value="SHA2"/>        
           <input name="Num_operacion" type="hidden" value="<%=num_operacion%>">
-          <input name="Importe" type="hidden" value="<%=format_amount(importe)%>">
+          <input name="Importe" type="hidden" value="<%=amount%>">
           <input name="TipoMoneda" type="hidden" value="978"/>
           <input name="Exponente" type="hidden" value="2"/>
           <input name="Pago_soportado" type="hidden" value="SSL"/>
@@ -85,15 +85,15 @@ module Payments
       EOF
 
       template = Tilt.new('erb'){result}
-      template.render(self, {num_operacion: charge.id.to_s,
-      	                     importe: charge.amount,
-                             ceca_url: gateway_configuration[:ceca_url],
+      template.render(self, {ceca_url: gateway_configuration[:ceca_url],
                              merchant_id: gateway_configuration[:merchant_id],
                              acquirer_id: gateway_configuration[:acquirer_id],
                              terminal_id: gateway_configuration[:terminal_id],
                              url_ok: gateway_configuration[:url_ok],
                              url_nok: gateway_configuration[:url_nok],
-                             firma: firma(num_operacion, format_amount(charge.amount), gateway_configuration)
+                             firma: firma(charge.id.to_s, format_amount(charge.amount), gateway_configuration),
+                             num_operacion: charge.id.to_s,
+                             amount: format_amount(charge.amount)
                             })
 
     end
