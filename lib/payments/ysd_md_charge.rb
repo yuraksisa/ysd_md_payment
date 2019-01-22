@@ -48,6 +48,7 @@ module Payments
     property :payment_method_id, String, :field => 'payment_method_id', :length => 30
     property :origin, String, :field => 'origin'
     property :sales_channel_code, String, length: 50
+    property :payment_type, Enum[:charge, :payment], default: :charge
 
     @loaded_charge_source = false
     @charge_source = nil
